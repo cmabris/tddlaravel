@@ -22,12 +22,12 @@ class UserController extends Controller
             ];
         }
 
-        return view('users', compact('users', 'title'));
+        return view('users.index', compact('users', 'title'));
     }
 
     public function show($id)
     {
-        return 'Mostrando los detalles del usuario: ' . $id;
+        return view('users.show', compact('id'));
     }
 
     public function create()
