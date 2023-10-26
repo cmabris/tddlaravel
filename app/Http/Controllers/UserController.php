@@ -10,14 +10,17 @@ class UserController extends Controller
     {
         $title = 'Listado de usuarios';
 
-        $users = [
-            'Joel',
-            'Ellie',
-            'Tess',
-            'Tommy',
-            'Bill',
-            '<script>alert("Click aquí")</script>',
-        ];
+        if (request()->has('empty')) {
+            $users = [];
+        } else {
+            $users = [
+                'Joel',
+                'Ellie',
+                'Tess',
+                'Tommy',
+                'Bill',
+            ];
+        }
 
         return view('users', compact('users', 'title'));
     }
