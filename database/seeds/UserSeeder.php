@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
+        factory(User::class)->create([
             'name' => 'Pepe Pérez',
             'email' => 'pepe@mail.es',
             'password' => bcrypt('123456'),
@@ -22,18 +22,10 @@ class UserSeeder extends Seeder
             'is_admin' => true,
         ]);
 
-        User::create([
-            'name' => 'Juan Martínez',
-            'email' => 'juan@mail.es',
-            'password' => bcrypt('123456'),
+        factory(User::class)->create([
             'profession_id' => Profession::whereTitle('Desarrollador Back-End')->value('id'),
         ]);
 
-        User::create([
-            'name' => 'Jaime Sánchez',
-            'email' => 'jaime@mail.es',
-            'password' => bcrypt('123456'),
-            'profession_id' => null,
-        ]);
+        factory(User::class, 48)->create();
     }
 }
