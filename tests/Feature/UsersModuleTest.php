@@ -31,12 +31,16 @@ class UsersModuleTest extends TestCase
     }
     
     /** @test  */
-    /*function it_loads_the_users_detail_page()
+    function it_displays_the_users_details()
     {
-        $this->get('usuarios/5')
+        $user = factory(User::class)->create([
+            'name' => 'Pepe Pérez',
+        ]);
+
+        $this->get('usuarios/' . $user->id)
             ->assertStatus(200)
-            ->assertSee('Usuario #5');
-    }*/
+            ->assertSee($user->name);
+    }
 
     /** @test  */
     /*function it_shows_the_users_list()
@@ -51,8 +55,6 @@ class UsersModuleTest extends TestCase
     /** @test  */
     function it_shows_a_default_message_if_the_users_list_is_empty()
     {
-        DB::table('users')->truncate();
-
         $this->get('usuarios?empty')
             ->assertStatus(200)
             ->assertSee('Listado de usuarios')
