@@ -84,4 +84,23 @@ class UsersModuleTest extends TestCase
             'password' => '123456',
         ]);
     }
+
+    /** @test */
+    function the_name_is_required()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->post('usuarios', [
+            'name' => '',
+            'email' => 'pepe@mail.es',
+            'password' => '123456',
+        ])->assertRedirect('usuarios/nuevo')
+            ->assertSessionHasErrors([
+                'name' => 'El campo nombre es obligatorio'
+            ]);
+
+        $this->assertDatabaseMissing('users', [
+            'email' => 'pepe@mail.es',
+        ]);
+    }
 }

@@ -28,6 +28,13 @@ class UserController extends Controller
     {
         $data = request()->all();
 
+        if (empty($data['name'])) {
+            return redirect('usuarios/nuevo')
+                ->withErrors([
+                    'name' => 'El campo nombre es obligatorio',
+                ]);
+        }
+
         User::create([
             'name' => $data['name'],
             'email' => $data['email'],
