@@ -100,4 +100,68 @@ class UsersModuleTest extends TestCase
 
         $this->assertEquals(0, User::count());
     }
+
+    /** @test */
+    function the_email_is_required()
+    {
+        $this->from('usuarios/nuevo')
+            ->post('usuarios', [
+                'name' => 'Pepito',
+                'email' => '',
+                'password' => '123456',
+            ])->assertRedirect('usuarios/nuevo')
+            ->assertSessionHasErrors([
+                'email' => 'El campo email es obligatorio'
+            ]);
+
+        $this->assertEquals(0, User::count());
+    }
+
+    /** @test */
+    function the_password_is_required()
+    {
+        $this->from('usuarios/nuevo')
+            ->post('usuarios', [
+                'name' => 'Pepito',
+                'email' => 'pepito@mail.es',
+                'password' => '',
+            ])->assertRedirect('usuarios/nuevo')
+            ->assertSessionHasErrors([
+                'password' => 'El campo contraseña es obligatorio'
+            ]);
+
+        $this->assertEquals(0, User::count());
+    }
+
+    /** @test */
+    function the_email_must_be_valid()
+    {
+        $this->from('usuarios/nuevo')
+            ->post('usuarios', [
+                'name' => 'Pepe',
+                'email' => 'correo-no-valido',
+                'password' => '123456',
+            ])->assertRedirect('usuarios/nuevo')
+            ->assertSessionHasErrors('email');
+
+        $this->assertEquals(0, User::count());
+    }
+
+    /** @test */
+    function the_email_must_be_unique()
+    {
+        factory(User::class)->create([
+            'email' => 'pepe@mail.es',
+        ]);
+
+        $this->from('usuarios/nuevo')
+            ->post('usuarios', [
+                'name' => 'Pepe',
+                'email' => 'pepe@mail.es',
+                'password' => '123456',
+            ])->assertRedirect('usuarios/nuevo')
+            ->assertSessionHasErrors('email');
+
+        $this->assertEquals(1, User::count());
+    }
 }

@@ -28,8 +28,12 @@ class UserController extends Controller
     {
         $data = request()->validate([
             'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required',
         ], [
            'name.required' => 'El campo nombre es obligatorio',
+            'email.required' => 'El campo email es obligatorio',
+            'password.required' => 'El campo contraseña es obligatorio'
         ]);
 
         User::create([
@@ -40,4 +44,5 @@ class UserController extends Controller
 
         return redirect()->route('users.index');
     }
+
 }
