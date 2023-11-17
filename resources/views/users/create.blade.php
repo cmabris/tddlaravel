@@ -21,15 +21,9 @@
 
         <label for="name">Nombre</label>
         <input type="text" name="name" placeholder="Nombre" value="{{ old('name') }}">
-        @if($errors->has('name'))
-            <p>{{ $errors->first('name') }}</p>
-        @endif
         <br>
         <label for="email">Correo Electrónico</label>
         <input type="email" name="email" placeholder="email" value="{{ old('email') }}">
-        @if($errors->has('email'))
-            <p>{{ $errors->first('name') }}</p>
-        @endif
         <br>
         <label for="password">Contraseña</label>
         <input type="password" name="password" placeholder="Al menos 6 caracteres">
