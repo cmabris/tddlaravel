@@ -24,7 +24,10 @@ Route::post('usuarios', 'UserController@store')
     ->name('user.store');
 Route::get('usuarios/{user}/editar', 'UserController@edit')
     ->name('user.edit');
+Route::put('usuarios/{user}', 'UserController@update')
+    ->name('user.update');
 Route::get('usuarios/{user}', 'UserController@show')
     ->name('users.show');
+
 
 Route::get('saludo/{name}/{nickname?}', 'WelcomeUserController');
