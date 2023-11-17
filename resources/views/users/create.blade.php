@@ -5,6 +5,8 @@
 @section('content')
     <h1>Crear nuevo usuario</h1>
 
+
+
     <form action="{{ route('user.store') }}" method="POST">
         {{ csrf_field() }}
 
