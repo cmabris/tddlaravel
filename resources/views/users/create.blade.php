@@ -34,6 +34,14 @@
                         <label for="password">Contraseña</label>
                         <input type="password" name="password" placeholder="Al menos 6 caracteres" class="form-control">
                     </div>
+                    <div class="form-group">
+                        <label for="bio">Biografía</label>
+                        <textarea name="bio" id="bio" class="form-control">{{ old('bio') }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="twitter">Twitter</label>
+                        <input type="text" class="form-control" name="twitter" id="twitter" value="{{ old('twitter') }}" placeholder="URL de twitter del usuario">
+                    </div>
                     <button type="submit">Crear usuario</button>
                     <a href="{{ route('users.index') }}" class="btn btn-link">Regresar al listado de usuarios</a>
                 </form>

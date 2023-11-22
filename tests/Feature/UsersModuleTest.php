@@ -43,16 +43,6 @@ class UsersModuleTest extends TestCase
     }
 
     /** @test  */
-    /*function it_shows_the_users_list()
-    {
-        $this->get('usuarios')
-            ->assertStatus(200)
-            ->assertSee('Listado de usuarios')
-            ->assertSee('Joel')
-            ->assertSee('Ellie');
-    }*/
-
-    /** @test  */
     function it_shows_a_default_message_if_the_users_list_is_empty()
     {
         $this->get('usuarios?empty')
@@ -72,16 +62,25 @@ class UsersModuleTest extends TestCase
     /** @test */
     function it_creates_a_new_user()
     {
+        $this->withoutExceptionHandling();
         $this->post('usuarios', [
             'name' => 'Juan',
             'email' => 'juan@mail.es',
             'password' => '123456',
+            'bio' => "Programador de Laravel y VueJS",
+            'twitter' => 'https://twitter.com/juan'
         ])->assertRedirect('usuarios');
 
         $this->assertCredentials([
             'name' => 'Juan',
             'email' => 'juan@mail.es',
             'password' => '123456',
+        ]);
+
+        $this->assertDatabaseHas('user_profiles', [
+            'bio' => "Programador de Laravel y VueJS",
+            'twitter' => 'https://twitter.com/juan',
+            'user_id' => User::findByEmail('juan@mail.es')->id
         ]);
     }
 
