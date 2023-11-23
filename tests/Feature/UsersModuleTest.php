@@ -27,6 +27,7 @@ class UsersModuleTest extends TestCase
             'bio' => "Programador de Laravel y VueJS",
             'twitter' => 'https://twitter.com/pepe',
             'profession_id' => $this->profession->id,
+            'role' => 'user',
         ], $custom);
     }
 
@@ -114,6 +115,7 @@ class UsersModuleTest extends TestCase
             'name' => 'Pepe',
             'email' => 'pepe@mail.es',
             'password' => '123456',
+            'role' => 'user'
         ]);
 
         $user = User::findByEmail('pepe@mail.es');
@@ -445,6 +447,34 @@ class UsersModuleTest extends TestCase
             ]))
             ->assertRedirect('usuarios/nuevo')
             ->assertSessionHasErrors(['skills']);
+
+        $this->assertDatabaseEmpty('users');
+    }
+
+    /** @test */
+    function the_role_field_is_optional()
+    {
+        $this->from('usuarios/nuevo')
+            ->post('usuarios', $this->getValidData([
+                'role' => null
+            ]))
+            ->assertRedirect('usuarios');
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'pepe@mail.es',
+            'role' => 'user',
+        ]);
+    }
+
+    /** @test  */
+    function the_role_field_must_be_valid()
+    {
+        $this->from('usuarios/nuevo')
+            ->post('usuarios', $this->getValidData([
+                'role' => 'invalid-role'
+            ]))
+            ->assertRedirect('usuarios/nuevo')
+            ->assertSessionHasErrors(['role']);
 
         $this->assertDatabaseEmpty('users');
     }
