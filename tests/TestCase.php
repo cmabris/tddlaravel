@@ -8,6 +8,13 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->withoutExceptionHandling();
+    }
+
     protected function assertDatabaseEmpty($table, $connection = null)
     {
         $total = $this->getConnection($connection)->table($table)->count();
