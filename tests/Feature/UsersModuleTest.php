@@ -19,14 +19,14 @@ class UsersModuleTest extends TestCase
     {
         $this->profession = factory(Profession::class)->create();
 
-        return array_filter(array_merge([
+        return array_merge([
             'name' => 'Pepe',
             'email' => 'pepe@mail.es',
             'password' => '123456',
             'bio' => "Programador de Laravel y VueJS",
             'twitter' => 'https://twitter.com/pepe',
             'profession_id' => $this->profession->id,
-        ], $custom));
+        ], $custom);
     }
 
     /** @test  */
@@ -77,6 +77,19 @@ class UsersModuleTest extends TestCase
     }
 
     /** @test */
+    function it_loads_the_new_user_page()
+    {
+        $profession = factory(Profession::class)->create();
+
+        $this->get('usuarios/nuevo')
+            ->assertStatus(200)
+            ->assertSee('Crear nuevo usuario')
+            ->assertViewHas('professions', function ($professions) use ($profession) {
+                return $professions->contains($profession);
+            });
+    }
+
+    /** @test */
     function it_creates_a_new_user()
     {
         //$this->withoutExceptionHandling();
@@ -87,13 +100,13 @@ class UsersModuleTest extends TestCase
             'name' => 'Pepe',
             'email' => 'pepe@mail.es',
             'password' => '123456',
-            'profession_id' => $this->profession->id,
         ]);
 
         $this->assertDatabaseHas('user_profiles', [
             'bio' => "Programador de Laravel y VueJS",
             'twitter' => 'https://twitter.com/pepe',
-            'user_id' => User::findByEmail('pepe@mail.es')->id
+            'user_id' => User::findByEmail('pepe@mail.es')->id,
+            'profession_id' => $this->profession->id,
         ]);
     }
 
@@ -341,12 +354,12 @@ class UsersModuleTest extends TestCase
             'name' => 'Pepe',
             'email' => 'pepe@mail.es',
             'password' => '123456',
-            'profession_id' => null,
         ]);
 
         $this->assertDatabaseHas('user_profiles', [
             'bio' => "Programador de Laravel y VueJS",
-            'user_id' => User::findByEmail('pepe@mail.es')->id
+            'user_id' => User::findByEmail('pepe@mail.es')->id,
+            'profession_id' => null,
         ]);
     }
 
