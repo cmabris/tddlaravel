@@ -2,11 +2,9 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Profession;
 use App\User;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class UpdateUsersTest extends TestCase
 {
@@ -14,27 +12,22 @@ class UpdateUsersTest extends TestCase
 
     private $profession;
 
-    public function getValidData(array $custom = [])
-    {
-        $this->profession = factory(Profession::class)->create();
-
-        return array_merge([
-            'name' => 'Pepe',
-            'email' => 'pepe@mail.es',
-            'password' => '123456',
-            'bio' => "Programador de Laravel y VueJS",
-            'twitter' => 'https://twitter.com/pepe',
-            'profession_id' => $this->profession->id,
-            'role' => 'user',
-        ], $custom);
-    }
+    protected $defaultData = [
+        'name' => 'Pepe',
+        'email' => 'pepe@mail.es',
+        'password' => '123456',
+        'bio' => "Programador de Laravel y VueJS",
+        'twitter' => 'https://twitter.com/pepe',
+        'profession_id' => '',
+        'role' => 'user',
+    ];
 
     /** @test */
     function it_loads_the_edit_user_page()
     {
         $user = factory(User::class)->create();
 
-        $this->get('usuarios/' . $user->id . '/editar')
+        $this->get('usuarios/'.$user->id.'/editar')
             ->assertStatus(200)
             ->assertViewIs('users.edit')
             ->assertSee('Editar usuario')
@@ -48,7 +41,7 @@ class UpdateUsersTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $this->put('usuarios/' . $user->id, $this->getValidData())
+        $this->put('usuarios/'.$user->id, $this->withData())
             ->assertRedirect('usuarios/'.$user->id);
 
         $this->assertCredentials([
@@ -64,10 +57,10 @@ class UpdateUsersTest extends TestCase
         $this->handleValidationExceptions();
         $user = factory(User::class)->create();
 
-        $this->from('usuarios/' . $user->id . '/editar')
-            ->put('usuarios/' . $user->id, $this->getValidData([
+        $this->from('usuarios/'.$user->id.'/editar')
+            ->put('usuarios/'.$user->id, $this->withData([
                 'name' => ''
-            ]))->assertRedirect('usuarios/'.$user->id . '/editar')
+            ]))->assertRedirect('usuarios/'.$user->id.'/editar')
             ->assertSessionHasErrors(['name']);
 
         $this->assertDatabaseMissing('users', [
@@ -82,10 +75,10 @@ class UpdateUsersTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $this->from('usuarios/' . $user->id . '/editar')
-            ->put('usuarios/' . $user->id, $this->getValidData([
+        $this->from('usuarios/'.$user->id.'/editar')
+            ->put('usuarios/'.$user->id, $this->withData([
                 'email' => ''
-            ]))->assertRedirect('usuarios/' . $user->id . '/editar')
+            ]))->assertRedirect('usuarios/'.$user->id.'/editar')
             ->assertSessionHasErrors(['email']);
 
         $this->assertDatabaseMissing('users', ['name' => 'Pepe']);
@@ -98,10 +91,10 @@ class UpdateUsersTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $this->from('usuarios/' . $user->id . '/editar')
-            ->put('usuarios/' . $user->id, $this->getValidData([
+        $this->from('usuarios/'.$user->id.'/editar')
+            ->put('usuarios/'.$user->id, $this->withData([
                 'email' => 'correo-no-valido'
-            ]))->assertRedirect('usuarios/' . $user->id . '/editar')
+            ]))->assertRedirect('usuarios/'.$user->id.'/editar')
             ->assertSessionHasErrors('email');
 
         $this->assertDatabaseMissing('users', ['name' => 'Pepe']);
@@ -120,10 +113,10 @@ class UpdateUsersTest extends TestCase
             'email' => 'pepe@mail.es',
         ]);
 
-        $this->from('usuarios/' . $user->id . '/editar')
-            ->put('usuarios/' . $user->id, $this->getValidData([
+        $this->from('usuarios/'.$user->id.'/editar')
+            ->put('usuarios/'.$user->id, $this->withData([
                 'email' => 'existing-email@mail.es'
-            ]))->assertRedirect('usuarios/' . $user->id . '/editar')
+            ]))->assertRedirect('usuarios/'.$user->id.'/editar')
             ->assertSessionHasErrors(['email']);
     }
 
@@ -137,12 +130,12 @@ class UpdateUsersTest extends TestCase
             'password' => bcrypt($oldPassword),
         ]);
 
-        $this->from('usuarios/' . $user->id . '/editar')
-            ->put('usuarios/' . $user->id, [
+        $this->from('usuarios/'.$user->id.'/editar')
+            ->put('usuarios/'.$user->id, [
                 'name' => 'Pepe',
                 'email' => 'pepe@mail.es',
                 'password' => '',
-            ])->assertRedirect('usuarios/' . $user->id);
+            ])->assertRedirect('usuarios/'.$user->id);
 
         $this->assertCredentials([
             'name' => 'Pepe',
@@ -155,14 +148,14 @@ class UpdateUsersTest extends TestCase
     function the_user_email_can_stay_the_same()
     {
         $this->handleValidationExceptions();
-        
+
         $user = factory(User::class)->create([
             'email' => 'pepe@mail.es',
         ]);
 
-        $this->from('usuarios/' . $user->id . '/editar')
-            ->put('usuarios/' . $user->id, $this->getValidData())
-            ->assertRedirect('usuarios/' . $user->id);
+        $this->from('usuarios/'.$user->id.'/editar')
+            ->put('usuarios/'.$user->id, $this->withData())
+            ->assertRedirect('usuarios/'.$user->id);
 
         $this->assertDatabaseHas('users', [
             'name' => 'Pepe',

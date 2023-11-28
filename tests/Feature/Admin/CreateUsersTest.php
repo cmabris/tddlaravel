@@ -5,28 +5,22 @@ namespace Tests\Feature\Admin;
 use App\Profession;
 use App\Skill;
 use App\User;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class CreateUsersTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function getValidData(array $custom = [])
-    {
-        $this->profession = factory(Profession::class)->create();
-
-        return array_merge([
-            'name' => 'Pepe',
-            'email' => 'pepe@mail.es',
-            'password' => '123456',
-            'bio' => "Programador de Laravel y VueJS",
-            'twitter' => 'https://twitter.com/pepe',
-            'profession_id' => '',
-            'role' => 'user',
-        ], $custom);
-    }
+    protected $defaultData = [
+        'name' => 'Pepe',
+        'email' => 'pepe@mail.es',
+        'password' => '123456',
+        'bio' => "Programador de Laravel y VueJS",
+        'twitter' => 'https://twitter.com/pepe',
+        'profession_id' => '',
+        'role' => 'user',
+    ];
 
     /** @test */
     function it_loads_the_new_user_page()
@@ -55,7 +49,7 @@ class CreateUsersTest extends TestCase
         $skillB = factory(Skill::class)->create();
         $skillC = factory(Skill::class)->create();
 
-        $this->post('usuarios', $this->getValidData([
+        $this->post('usuarios', $this->withData([
             'skills' => [$skillA->id, $skillB->id],
             'profession_id' => $profession->id,
         ]))
@@ -92,14 +86,26 @@ class CreateUsersTest extends TestCase
     }
 
     /** @test */
+    function the_user_is_redirected_to_the_previous_page_when_the_validation_fails()
+    {
+        $this->handleValidationExceptions();
+
+        $this->from('usuarios/nuevo')
+            ->post('usuarios', [])
+            ->assertRedirect('usuarios/nuevo');
+
+        $this->assertDatabaseEmpty('users');
+    }
+
+    /** @test */
     function the_name_is_required()
     {
         $this->handleValidationExceptions();
 
         $this->from('usuarios/nuevo')
-            ->post('usuarios', $this->getValidData([
+            ->post('usuarios', $this->withData([
                 'name' => ''
-            ]))->assertRedirect('usuarios/nuevo')
+            ]))
             ->assertSessionHasErrors([
                 'name' => 'El campo nombre es obligatorio'
             ]);
@@ -113,9 +119,9 @@ class CreateUsersTest extends TestCase
         $this->handleValidationExceptions();
 
         $this->from('usuarios/nuevo')
-            ->post('usuarios', $this->getValidData([
+            ->post('usuarios', $this->withData([
                 'email' => ''
-            ]))->assertRedirect('usuarios/nuevo')
+            ]))
             ->assertSessionHasErrors([
                 'email' => 'El campo email es obligatorio'
             ]);
@@ -129,9 +135,9 @@ class CreateUsersTest extends TestCase
         $this->handleValidationExceptions();
 
         $this->from('usuarios/nuevo')
-            ->post('usuarios', $this->getValidData([
+            ->post('usuarios', $this->withData([
                 'password' => ''
-            ]))->assertRedirect('usuarios/nuevo')
+            ]))
             ->assertSessionHasErrors([
                 'password' => 'El campo contraseña es obligatorio'
             ]);
@@ -145,9 +151,9 @@ class CreateUsersTest extends TestCase
         $this->handleValidationExceptions();
 
         $this->from('usuarios/nuevo')
-            ->post('usuarios', $this->getValidData([
+            ->post('usuarios', $this->withData([
                 'email' => 'correo-no-valido',
-            ]))->assertRedirect('usuarios/nuevo')
+            ]))
             ->assertSessionHasErrors('email');
 
         $this->assertDatabaseEmpty('users');
@@ -163,9 +169,9 @@ class CreateUsersTest extends TestCase
         ]);
 
         $this->from('usuarios/nuevo')
-            ->post('usuarios', $this->getValidData([
+            ->post('usuarios', $this->withData([
                 'email' => 'pepe@mail.es'
-            ]))->assertRedirect('usuarios/nuevo')
+            ]))
             ->assertSessionHasErrors('email');
 
         $this->assertEquals(1, User::count());
@@ -176,7 +182,7 @@ class CreateUsersTest extends TestCase
     {
         $this->handleValidationExceptions();
 
-        $this->post('usuarios', $this->getValidData([
+        $this->post('usuarios', $this->withData([
             'twitter' => null
         ]))->assertRedirect('usuarios');
 
@@ -198,7 +204,7 @@ class CreateUsersTest extends TestCase
     {
         $this->handleValidationExceptions();
 
-        $this->post('usuarios', $this->getValidData([
+        $this->post('usuarios', $this->withData([
             'profession_id' => null
         ]))->assertRedirect('usuarios');
 
@@ -221,9 +227,9 @@ class CreateUsersTest extends TestCase
         $this->handleValidationExceptions();
 
         $this->from('usuarios/nuevo')
-            ->post('usuarios', $this->getValidData([
+            ->post('usuarios', $this->withData([
                 'profession_id' => '999'
-            ]))->assertRedirect('usuarios/nuevo')
+            ]))
             ->assertSessionHasErrors(['profession_id']);
 
         $this->assertDatabaseEmpty('users');
@@ -239,9 +245,9 @@ class CreateUsersTest extends TestCase
         ]);
 
         $this->from('usuarios/nuevo')
-            ->post('usuarios', $this->getValidData([
+            ->post('usuarios', $this->withData([
                 'profession_id' => $deletedProfession->id
-            ]))->assertRedirect('usuarios/nuevo')
+            ]))
             ->assertSessionHasErrors(['profession_id']);
 
         $this->assertDatabaseEmpty('users');
@@ -253,16 +259,15 @@ class CreateUsersTest extends TestCase
         $this->handleValidationExceptions();
 
         $this->from('usuarios/nuevo')
-            ->post('usuarios', $this->getValidData([
+            ->post('usuarios', $this->withData([
                 'skills' => 'PHP, JS'
             ]))
-            ->assertRedirect('usuarios/nuevo')
             ->assertSessionHasErrors(['skills']);
 
         $this->assertDatabaseEmpty('users');
     }
 
-    /** @test  */
+    /** @test */
     function the_skills_must_be_valid()
     {
         $this->handleValidationExceptions();
@@ -271,10 +276,9 @@ class CreateUsersTest extends TestCase
         $skillB = factory(Skill::class)->create();
 
         $this->from('usuarios/nuevo')
-            ->post('usuarios', $this->getValidData([
+            ->post('usuarios', $this->withData([
                 'skills' => [$skillA->id, $skillB->id + 1]
             ]))
-            ->assertRedirect('usuarios/nuevo')
             ->assertSessionHasErrors(['skills']);
 
         $this->assertDatabaseEmpty('users');
@@ -286,7 +290,7 @@ class CreateUsersTest extends TestCase
         $this->handleValidationExceptions();
 
         $this->from('usuarios/nuevo')
-            ->post('usuarios', $this->getValidData([
+            ->post('usuarios', $this->withData([
                 'role' => null
             ]))
             ->assertRedirect('usuarios');
@@ -297,16 +301,15 @@ class CreateUsersTest extends TestCase
         ]);
     }
 
-    /** @test  */
+    /** @test */
     function the_role_field_must_be_valid()
     {
         $this->handleValidationExceptions();
 
         $this->from('usuarios/nuevo')
-            ->post('usuarios', $this->getValidData([
+            ->post('usuarios', $this->withData([
                 'role' => 'invalid-role'
             ]))
-            ->assertRedirect('usuarios/nuevo')
             ->assertSessionHasErrors(['role']);
 
         $this->assertDatabaseEmpty('users');
