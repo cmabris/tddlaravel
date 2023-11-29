@@ -13,6 +13,16 @@ trait TestHelpers
         ));
     }
 
+    protected function assertDatabaseCount($table, $expected, $connection = null)
+    {
+        $found = $this->getConnection($connection)->table($table)->count();
+
+        $this->assertSame($expected, $found, sprintf(
+            "Failed asserting the table [%s] has %s %s found.",
+            $table, $expected, str_plural('row', $found)
+        ));
+    }
+
     public function withData(array $custom = [])
     {
         return array_merge($this->defaultData, $custom);
