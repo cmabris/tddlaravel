@@ -31,5 +31,7 @@ Route::delete('usuarios/{user}', 'UserController@destroy')
 Route::get('usuarios/{user}', 'UserController@show')
     ->name('users.show');
 
+Route::get('editar-perfil', 'ProfileController@edit');
+Route::put('editar-perfil', 'ProfileController@update');
 
 Route::get('saludo/{name}/{nickname?}', 'WelcomeUserController');
