@@ -34,4 +34,11 @@ Route::get('usuarios/{user}', 'UserController@show')
 Route::get('editar-perfil', 'ProfileController@edit');
 Route::put('editar-perfil', 'ProfileController@update');
 
-Route::get('saludo/{name}/{nickname?}', 'WelcomeUserController');
+
+Route::get('profesiones', 'ProfessionController@index')
+    ->name('profession.index');
+
+Route::get('habilidades', 'SkillController@index')
+    ->name('skill.index');
+
+Route::delete('profesiones/{profession}', 'ProfessionController@destroy');

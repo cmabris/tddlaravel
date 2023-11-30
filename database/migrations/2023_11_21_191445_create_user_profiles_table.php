@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateUserProfilesTable extends Migration
 {
@@ -23,9 +23,14 @@ class CreateUserProfilesTable extends Migration
             $table->foreign('profession_id')
                 ->references('id')
                 ->on('professions');
+            //->onDelete('SET NULL');
+            //->onDelete('CASCADE');
 
             $table->unsignedInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('CASCADE');
 
             $table->timestamps();
         });
