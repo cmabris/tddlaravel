@@ -26,10 +26,14 @@ Route::get('usuarios/{user}/editar', 'UserController@edit')
     ->name('user.edit');
 Route::put('usuarios/{user}', 'UserController@update')
     ->name('user.update');
-Route::delete('usuarios/{user}', 'UserController@destroy')
+Route::delete('usuarios/{id}', 'UserController@destroy')
     ->name('user.destroy');
+Route::get('usuarios/papelera', 'UserController@trashed')
+    ->name('users.trashed');
 Route::get('usuarios/{user}', 'UserController@show')
     ->name('users.show');
+Route::patch('usuarios/{user}/papelera', 'UserController@trash')
+    ->name('user.trash');
 
 Route::get('editar-perfil', 'ProfileController@edit');
 Route::put('editar-perfil', 'ProfileController@update');
