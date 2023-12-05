@@ -13,14 +13,14 @@ class UserController extends Controller
     public function index()
     {
         return view('users.index')
-            ->with('users', User::all())
+            ->with('users', User::orderBy('created_at', 'DESC')->paginate())
             ->with('title', 'Listado de usuarios');
     }
 
     public function trashed()
     {
         return view('users.index')
-            ->with('users', User::onlyTrashed()->get())
+            ->with('users', User::onlyTrashed()->paginate())
             ->with('title', 'Listado de usuarios en la papelera');
     }
 
