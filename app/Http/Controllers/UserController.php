@@ -7,13 +7,22 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Profession;
 use App\Skill;
 use App\User;
+use Illuminate\Database\Eloquent\Builder;
 
 class UserController extends Controller
 {
     public function index()
     {
+        $users = User::query()
+            ->when(request('search'), function (Builder $query, $search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            })
+            ->orderBy('created_at', 'DESC')
+            ->paginate();
+
         return view('users.index')
-            ->with('users', User::orderBy('created_at', 'DESC')->paginate())
+            ->with('users', $users)
             ->with('title', 'Listado de usuarios');
     }
 
