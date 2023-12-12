@@ -9,7 +9,7 @@
             <a href="{{ route('users.create') }}" class="btn btn-primary">Nuevo usuario</a>
         </p>
     </div>
-    
+
     @include('users._filters')
 
     @if($users->isNotEmpty())

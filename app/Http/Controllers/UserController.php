@@ -26,6 +26,8 @@ class UserController extends Controller
             ->orderBy('created_at', 'DESC')
             ->paginate();
 
+        $users->appends(request(['search', 'team']));
+
         return view('users.index')
             ->with('users', $users)
             ->with('title', 'Listado de usuarios');
