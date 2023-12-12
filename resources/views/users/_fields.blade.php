@@ -1,8 +1,14 @@
 {{ csrf_field() }}
 
 <div class="form-group">
-    <label for="name">Nombre</label>
-    <input type="text" name="name" placeholder="Nombre" value="{{ old('name', $user->name) }}" class="form-control">
+    <label for="first_name">Nombre</label>
+    <input type="text" name="first_name" placeholder="Nombre" value="{{ old('first_name', $user->first_name) }}"
+           class="form-control">
+</div>
+<div class="form-group">
+    <label for="last_name">Apellidos</label>
+    <input type="text" name="last_name" placeholder="Apellidos" value="{{ old('last_name', $user->last_name) }}"
+           class="form-control">
 </div>
 <div class="form-group">
     <label for="email">Correo Electrónico</label>

@@ -16,7 +16,8 @@ class UpdateUsersTest extends TestCase
     private $profession;
 
     protected $defaultData = [
-        'name' => 'Pepe',
+        'first_name' => 'Pepe',
+        'last_name' => 'Perez',
         'email' => 'pepe@mail.es',
         'password' => '123456',
         'bio' => "Programador de Laravel y VueJS",
@@ -58,26 +59,22 @@ class UpdateUsersTest extends TestCase
         $newSkill1 = factory(Skill::class)->create();
         $newSkill2 = factory(Skill::class)->create();
 
-        $this->put('usuarios/'.$user->id, [
-            'name' => 'Pepe',
-            'email' => 'pepe@mail.es',
-            'password' => '123456',
+        $this->put('usuarios/'.$user->id, $this->withData([
             'role' => 'admin',
-            'bio' => 'Programador de Laravel y Vue.js',
-            'twitter' => 'https://twitter.com/pepe',
             'profession_id' => $newProfession->id,
             'skills' => [$newSkill1->id, $newSkill2->id],
-        ])->assertRedirect('usuarios/'.$user->id);
+        ]))->assertRedirect('usuarios/'.$user->id);
 
         $this->assertDatabaseHas('users', [
-            'name' => 'Pepe',
+            'first_name' => 'Pepe',
+            'last_name' => 'Perez',
             'email' => 'pepe@mail.es',
             'role' => 'admin'
         ]);
 
         $this->assertDatabaseHas('user_profiles', [
             'user_id' => $user->id,
-            'bio' => 'Programador de Laravel y Vue.js',
+            'bio' => 'Programador de Laravel y VueJS',
             'twitter' => 'https://twitter.com/pepe',
             'profession_id' => $newProfession->id,
         ]);
@@ -95,16 +92,33 @@ class UpdateUsersTest extends TestCase
     }
 
     /** @test */
-    function the_name_is_required()
+    function the_first_name_is_required()
     {
         $this->handleValidationExceptions();
         $user = factory(User::class)->create();
 
         $this->from('usuarios/'.$user->id.'/editar')
             ->put('usuarios/'.$user->id, $this->withData([
-                'name' => ''
+                'first_name' => ''
             ]))->assertRedirect('usuarios/'.$user->id.'/editar')
-            ->assertSessionHasErrors(['name']);
+            ->assertSessionHasErrors(['first_name']);
+
+        $this->assertDatabaseMissing('users', [
+            'email' => 'pepe@mail.es',
+        ]);
+    }
+
+    /** @test */
+    function the_last_name_is_required()
+    {
+        $this->handleValidationExceptions();
+        $user = factory(User::class)->create();
+
+        $this->from('usuarios/'.$user->id.'/editar')
+            ->put('usuarios/'.$user->id, $this->withData([
+                'last_name' => ''
+            ]))->assertRedirect('usuarios/'.$user->id.'/editar')
+            ->assertSessionHasErrors(['last_name']);
 
         $this->assertDatabaseMissing('users', [
             'email' => 'pepe@mail.es',
@@ -124,7 +138,7 @@ class UpdateUsersTest extends TestCase
             ]))->assertRedirect('usuarios/'.$user->id.'/editar')
             ->assertSessionHasErrors(['email']);
 
-        $this->assertDatabaseMissing('users', ['name' => 'Pepe']);
+        $this->assertDatabaseMissing('users', ['first_name' => 'Pepe']);
     }
 
     /** @test */
@@ -140,7 +154,7 @@ class UpdateUsersTest extends TestCase
             ]))->assertRedirect('usuarios/'.$user->id.'/editar')
             ->assertSessionHasErrors('email');
 
-        $this->assertDatabaseMissing('users', ['name' => 'Pepe']);
+        $this->assertDatabaseMissing('users', ['first_name' => 'Pepe']);
     }
 
     /** @test */
@@ -179,7 +193,8 @@ class UpdateUsersTest extends TestCase
             ]))->assertRedirect('usuarios/'.$user->id);
 
         $this->assertCredentials([
-            'name' => 'Pepe',
+            'first_name' => 'Pepe',
+            'last_name' => 'Pérez',
             'email' => 'pepe@mail.es',
             'password' => $oldPassword,
         ]);
@@ -199,7 +214,7 @@ class UpdateUsersTest extends TestCase
             ->assertRedirect('usuarios/'.$user->id);
 
         $this->assertDatabaseHas('users', [
-            'name' => 'Pepe',
+            'first_name' => 'Pepe',
             'email' => 'pepe@mail.es'
         ]);
     }

@@ -70,12 +70,12 @@ class DeleteUsersTest extends TestCase
     function it_shows_the_deleted_users()
     {
         $user = factory(User::class)->create([
-            'name' => 'Joel',
+            'first_name' => 'Joel',
             'deleted_at' => now()
         ]);
 
         factory(User::class)->create([
-            'name' => 'Ellie',
+            'first_name' => 'Ellie',
         ]);
 
         $this->get('usuarios/papelera')

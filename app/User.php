@@ -37,6 +37,11 @@ class User extends Authenticatable
         return $this->belongsTo(Team::class)->withDefault();
     }
 
+    public function getNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+
     public function isAdmin()
     {
         return $this->role === 'admin';
@@ -54,7 +59,8 @@ class User extends Authenticatable
         }
 
         $query->where(function (Builder $query) use ($search) {
-            $query->where('name', 'like', "%{$search}%")
+            $query->whereRaw('CONCAT(first_name, " ", last_name) like ?', "%{$search}%")
+                //where(DB::raw('CONCAT(first_name, " ", last_name)'), 'like', "%{$search}%")
                 ->orWhere('email', 'like', "%{$search}%")
                 ->orWhereHas('team', function ($query) use ($search) {
                     $query->where('name', 'like', "%{$search}%");

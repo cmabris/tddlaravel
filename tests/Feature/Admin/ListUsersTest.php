@@ -14,11 +14,11 @@ class ListUsersTest extends TestCase
     function it_shows_the_users_list()
     {
         factory(User::class)->create([
-            'name' => 'Joel',
+            'first_name' => 'Joel',
         ]);
 
         factory(User::class)->create([
-            'name' => 'Ellie',
+            'first_name' => 'Ellie',
         ]);
 
         $this->get('usuarios')
@@ -41,7 +41,7 @@ class ListUsersTest extends TestCase
     function it_paginates_the_users()
     {
         factory(User::class)->create([
-            'name' => 'Tercer usuario',
+            'first_name' => 'Tercer usuario',
             'created_at' => now()->subDays(5),
         ]);
 
@@ -50,22 +50,22 @@ class ListUsersTest extends TestCase
         ]);
 
         factory(User::class)->create([
-            'name' => 'Decimoseptimo usuario',
+            'first_name' => 'Decimoseptimo usuario',
             'created_at' => now()->subDays(2),
         ]);
 
         factory(User::class)->create([
-            'name' => 'Segundo usuario',
+            'first_name' => 'Segundo usuario',
             'created_at' => now()->subDays(6),
         ]);
 
         factory(User::class)->create([
-            'name' => 'Primer usuario',
+            'first_name' => 'Primer usuario',
             'created_at' => now()->subWeek(),
         ]);
 
         factory(User::class)->create([
-            'name' => 'Decimosexto usuario',
+            'first_name' => 'Decimosexto usuario',
             'created_at' => now()->subDays(3),
         ]);
 

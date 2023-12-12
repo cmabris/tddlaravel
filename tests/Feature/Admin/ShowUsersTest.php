@@ -3,27 +3,27 @@
 namespace Tests\Feature\Admin;
 
 use App\User;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ShowUsersTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test  */
+    /** @test */
     function it_displays_the_users_details()
     {
         $user = factory(User::class)->create([
-            'name' => 'Pepe Pérez',
+            'first_name' => 'Pepe',
+            'last_name' => 'Pérez',
         ]);
 
-        $this->get('usuarios/' . $user->id)
+        $this->get('usuarios/'.$user->id)
             ->assertStatus(200)
             ->assertSee($user->name);
     }
 
-    /** @test  */
+    /** @test */
     function it_displays_a_404_error_if_the_user_is_not_found()
     {
         $this->withExceptionHandling();
