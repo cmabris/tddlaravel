@@ -80,7 +80,7 @@ class DeleteUsersTest extends TestCase
 
         $this->get('usuarios/papelera')
             ->assertStatus(200)
-            ->assertSee('Listado de usuarios en la papelera')
+            ->assertSee(trans('users.title.trash'))
             ->assertSee('Joel')
             ->assertDontSee('Ellie');
 

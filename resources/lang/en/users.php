@@ -9,6 +9,10 @@ return [
         'active' => 'Activo',
         'inactive' => 'Inactivo',
     ],
+    'title' => [
+        'index' => 'Listado de usuarios',
+        'trash' => 'Listado de usuarios en la papelera',
+    ],
     'filters' => [
         'states' => [
             'all' => 'Todos',
@@ -17,8 +21,8 @@ return [
         ],
         'roles' => [
             'all' => 'Todos',
-            'admins' => 'Administradores',
-            'users' => 'Usuarios',
+            'admin' => 'Administradores',
+            'user' => 'Usuarios',
         ],
     ],
 ];
