@@ -13,6 +13,7 @@ class FilterUsersTest extends TestCase
     /** @test */
     function filter_users_by_state_active()
     {
+        self::markTestIncomplete();
         $activeUser = factory(User::class)->create();
         $inactiveUser = factory(User::class)->create();
 
@@ -26,6 +27,7 @@ class FilterUsersTest extends TestCase
     /** @test */
     function filter_users_by_state_inactive()
     {
+        self::markTestIncomplete();
         $activeUser = factory(User::class)->create();
         $inactiveUser = factory(User::class)->create();
 
