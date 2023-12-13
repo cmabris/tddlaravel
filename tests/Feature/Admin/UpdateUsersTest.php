@@ -24,6 +24,7 @@ class UpdateUsersTest extends TestCase
         'twitter' => 'https://twitter.com/pepe',
         'profession_id' => '',
         'role' => 'user',
+        'state' => 'active',
     ];
 
     /** @test */
@@ -61,6 +62,7 @@ class UpdateUsersTest extends TestCase
 
         $this->put('usuarios/'.$user->id, $this->withData([
             'role' => 'admin',
+            'state' => 'inactive',
             'profession_id' => $newProfession->id,
             'skills' => [$newSkill1->id, $newSkill2->id],
         ]))->assertRedirect('usuarios/'.$user->id);
@@ -69,7 +71,8 @@ class UpdateUsersTest extends TestCase
             'first_name' => 'Pepe',
             'last_name' => 'Perez',
             'email' => 'pepe@mail.es',
-            'role' => 'admin'
+            'role' => 'admin',
+            'active' => false,
         ]);
 
         $this->assertDatabaseHas('user_profiles', [
@@ -232,5 +235,41 @@ class UpdateUsersTest extends TestCase
             ->assertRedirect('usuarios/'.$user->id);
 
         $this->assertDatabaseEmpty('skill_user');
+    }
+
+    /** @test */
+    function the_state_is_required()
+    {
+        $this->handleValidationExceptions();
+
+        $user = factory(User::class)->create();
+
+        $this->from('usuarios/'.$user->id.'/editar')
+            ->put('usuarios/'.$user->id, $this->withData([
+                'state' => '',
+            ]))->assertRedirect('usuarios/'.$user->id.'/editar')
+            ->assertSessionHasErrors(['state']);
+
+        $this->assertDatabaseMissing('users', [
+            'first_name' => 'Pepe',
+        ]);
+    }
+
+    /** @test */
+    function the_state_must_be_valid()
+    {
+        $this->handleValidationExceptions();
+
+        $user = factory(User::class)->create();
+
+        $this->from('usuarios/'.$user->id.'/editar')
+            ->put('usuarios/'.$user->id, $this->withData([
+                'state' => 'invalid-state',
+            ]))->assertRedirect('usuarios/'.$user->id.'/editar')
+            ->assertSessionHasErrors(['state']);
+
+        $this->assertDatabaseMissing('users', [
+            'first_name' => 'Pepe',
+        ]);
     }
 }

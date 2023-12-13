@@ -39,6 +39,9 @@ class UpdateUserRequest extends FormRequest
                 Rule::exists('professions', 'id')->whereNull('deleted_at')
             ],
             'skills' => ['array', Rule::exists('skills', 'id')],
+            'state' => [
+                Rule::in(['active', 'inactive'])
+            ],
         ];
     }
 
@@ -49,6 +52,7 @@ class UpdateUserRequest extends FormRequest
             'last_name' => $this->last_name,
             'email' => $this->email,
             'role' => $this->role,
+            'state' => $this->state,
         ]);
         if ($this->password != null) {
             $user->password = bcrypt($this->password);
