@@ -14,9 +14,9 @@
         <div class="col-12">
             @foreach($states as $value => $text)
                 <div class="form-check form-check-inline">
-                    <input type="radio" class="form-check-input" name="team" id="team_{{ $value ?: 'all' }}"
-                           value="{{ $value }}" {{ $value === request('team', '') ? 'checked' : '' }}>
-                    <label class="form-check-label" for="team_{{ $value ?: 'all' }}">{{ $text }}</label>
+                    <input type="radio" class="form-check-input" name="state" id="state_{{ $value ?: 'all' }}"
+                           value="{{ $value }}" {{ $value === request('state', '') ? 'checked' : '' }}>
+                    <label class="form-check-label" for="state_{{ $value ?: 'all' }}">{{ $text }}</label>
                 </div>
             @endforeach
         </div>
