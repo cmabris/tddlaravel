@@ -51,7 +51,7 @@ class UpdateUserRequest extends FormRequest
             'role' => $this->role,
         ]);
         if ($this->password != null) {
-            $this->password = bcrypt($this->password);
+            $user->password = bcrypt($this->password);
         }
 
         $user->save();

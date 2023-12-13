@@ -29,8 +29,14 @@ class UserController extends Controller
         $users->appends(request(['search', 'team']));
 
         return view('users.index')
-            ->with('users', $users)
-            ->with('title', 'Listado de usuarios');
+            ->with([
+                'users' => $users,
+                'title' => 'Listado de usuarios',
+                'roles' => trans('users.roles'),
+                'skills' => Skill::orderBy('name')->get(),
+                'states' => trans('users.filters.states'),
+                'checkedSkills' => collect(request('skills')),
+            ]);
     }
 
     public function trashed()
