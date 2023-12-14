@@ -7,11 +7,12 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Profession;
 use App\Skill;
 use App\User;
+use App\UserFilter;
 use Illuminate\Database\Eloquent\Builder;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(UserFilter $userFilter)
     {
         $users = User::query()
             ->with('team', 'skills', 'profile.profession')
@@ -22,11 +23,11 @@ class UserController extends Controller
                     $query->doesntHave('team');
                 }
             })
-            ->filterBy(request()->only(['state', 'role', 'search']))
+            ->filterBy($userFilter, request()->only(['state', 'role', 'search']))
             ->orderBy('created_at', 'DESC')
             ->paginate();
 
-        $users->appends(request(['search', 'team']));
+        $users->appends($userFilter->valid());
 
         return view('users.index')
             ->with([
