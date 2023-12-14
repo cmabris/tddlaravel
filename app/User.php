@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -25,6 +24,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function newEloquentBuilder($query)
+    {
+        return new UserQuery($query);
+    }
 
     public function profile()
     {
@@ -61,44 +65,5 @@ class User extends Authenticatable
     public function isAdmin()
     {
         return $this->role === 'admin';
-    }
-
-    public static function findByEmail($email)
-    {
-        return static::where('email', $email)->first();
-    }
-
-    public function scopeSearch($query, $search)
-    {
-        if (empty($search)) {
-            return;
-        }
-
-        $query->where(function (Builder $query) use ($search) {
-            $query->whereRaw('CONCAT(first_name, " ", last_name) like ?', "%{$search}%")
-                //where(DB::raw('CONCAT(first_name, " ", last_name)'), 'like', "%{$search}%")
-                ->orWhere('email', 'like', "%{$search}%")
-                ->orWhereHas('team', function ($query) use ($search) {
-                    $query->where('name', 'like', "%{$search}%");
-                });
-        });
-    }
-
-    public function scopeByState($query, $state)
-    {
-        if ($state == 'active') {
-            return $query->where('active', true);
-        }
-
-        if ($state == 'inactive') {
-            return $query->where('active', false);
-        }
-    }
-
-    public function scopeByRole($query, $role)
-    {
-        if (in_array($role, ['admin', 'user'])) {
-            $query->where('role', $role);
-        }
     }
 }
