@@ -4,7 +4,6 @@ namespace Tests\Feature\Admin;
 
 use App\Profession;
 use App\User;
-use App\UserProfile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -24,7 +23,6 @@ class UserProfileTest extends TestCase
     function a_user_can_edit_its_profile()
     {
         $user = factory(User::class)->create();
-        $user->profile()->save(factory(UserProfile::class)->make());
 
         $newProfession = factory(Profession::class)->create();
 

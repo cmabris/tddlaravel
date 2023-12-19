@@ -5,7 +5,6 @@ namespace Tests\Feature\Admin;
 use App\Profession;
 use App\Skill;
 use App\User;
-use App\UserProfile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -48,9 +47,9 @@ class UpdateUsersTest extends TestCase
 
         $oldProfession = factory(Profession::class)->create();
 
-        $user->profile()->save(factory(UserProfile::class)->make([
+        $user->profile()->update([
             'profession_id' => $oldProfession->id
-        ]));
+        ]);
 
         $oldSkill1 = factory(Skill::class)->create();
         $oldSkill2 = factory(Skill::class)->create();

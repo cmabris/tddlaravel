@@ -26,7 +26,7 @@ class CreateUserProfilesTable extends Migration
             //->onDelete('SET NULL');
             //->onDelete('CASCADE');
 
-            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('user_id')->unique();
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')

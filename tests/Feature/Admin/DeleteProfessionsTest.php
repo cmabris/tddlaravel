@@ -4,7 +4,6 @@ namespace Tests\Feature\Admin;
 
 use App\Profession;
 use App\User;
-use App\UserProfile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -32,9 +31,9 @@ class DeleteProfessionsTest extends TestCase
         $user = factory(User::class)->create();
         $profession = factory(Profession::class)->create();
 
-        $user->profile()->save(factory(UserProfile::class)->make([
+        $user->profile()->update([
             'profession_id' => $profession->id,
-        ]));
+        ]);
 
         $response = $this->delete('profesiones/'.$profession->id);
 
