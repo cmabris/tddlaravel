@@ -15,7 +15,7 @@ return [
     ],
     'filters' => [
         'states' => [
-            'all' => 'Todos',
+            '' => 'Todos',
             'active' => 'Solo activos',
             'inactive' => 'Solo inactivos',
         ],
