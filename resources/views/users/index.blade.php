@@ -26,7 +26,7 @@
                 <tr>
                     <th scope="col"># <span class="oi oi-caret-bottom"></span><span class="oi oi-caret-top"></span></th>
                     <th scope="col"><a
-                                href="{{ $sortable->url('name') }}"
+                                href="{{ $sortable->url('last_name') }}"
                                 class="{{ $sortable->classes('name') }}">Nombre</a>
                     </th>
                     <th scope="col"><a

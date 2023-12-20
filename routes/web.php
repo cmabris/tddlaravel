@@ -28,7 +28,7 @@ Route::put('usuarios/{user}', 'UserController@update')
     ->name('user.update');
 Route::delete('usuarios/{id}', 'UserController@destroy')
     ->name('user.destroy');
-Route::get('usuarios/papelera', 'UserController@trashed')
+Route::get('usuarios/papelera', 'UserController@index')
     ->name('users.trashed');
 Route::get('usuarios/{user}', 'UserController@show')
     ->name('users.show');
