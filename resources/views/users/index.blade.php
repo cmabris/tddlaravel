@@ -25,9 +25,17 @@
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col"># <span class="oi oi-caret-bottom"></span><span class="oi oi-caret-top"></span></th>
-                    <th scope="col"><a href="#" class="{{ $sortable->classes('name') }}">Nombre</a></th>
-                    <th scope="col"><a href="#" class="{{ $sortable->classes('email') }}">Correo</a></th>
-                    <th scope="col"><a href="#" class="{{ $sortable->classes('created_at') }}">Fechas</a></th>
+                    <th scope="col"><a
+                                href="{{ $sortable->url('name') }}"
+                                class="{{ $sortable->classes('name') }}">Nombre</a>
+                    </th>
+                    <th scope="col"><a
+                                href="{{ $sortable->url('email') }}"
+                                class="{{ $sortable->classes('email') }}">Correo</a>
+                    </th>
+                    <th scope="col"><a
+                                href="{{ $sortable->url('created_at') }}"
+                                class="{{ $sortable->classes('created_at') }}">Fechas</a></th>
                     <th scope="col" class="text-right th-actions">Acciones</th>
                 </tr>
                 </thead>
