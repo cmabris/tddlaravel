@@ -10,5 +10,16 @@ class QueryBuilder extends \Illuminate\Database\Eloquent\Builder
     {
         $this->addBinding($subquery->getBindings());
         $this->where(DB::raw("({$subquery->toSql()})"), $operator, $value);
+
+        return $this;
+    }
+
+    public function onlyTrashedif($value)
+    {
+        if ($value) {
+            $this->onlyTrashed();
+        }
+
+        return $this;
     }
 }
