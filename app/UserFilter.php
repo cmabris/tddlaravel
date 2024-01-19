@@ -19,7 +19,6 @@ class UserFilter extends QueryFilter
             'to' => 'date_format:d/m/Y',
             'order' => 'in:last_name,email,created_at',
             'direction' => 'in:asc,desc',
-            'trashed' => 'accepted',
         ];
     }
 
@@ -71,10 +70,5 @@ class UserFilter extends QueryFilter
     public function direction($query, $value)
     {
 
-    }
-
-    public function trashed($query, $value)
-    {
-        $query->onlyTrashed();
     }
 }
