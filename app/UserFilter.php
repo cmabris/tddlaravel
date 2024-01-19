@@ -4,9 +4,13 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class UserFilter extends QueryFilter
 {
+    protected $aliases = [
+        'date' => 'created_at',
+    ];
 
     public function filterRules(): array
     {
@@ -17,9 +21,13 @@ class UserFilter extends QueryFilter
             'skills' => 'array|exists:skills,id',
             'from' => 'date_format:d/m/Y',
             'to' => 'date_format:d/m/Y',
-            'order' => 'in:last_name,email,created_at',
-            'direction' => 'in:asc,desc',
+            'order' => 'in:first_name,email,date,first_name-desc,email-desc,date-desc',
         ];
+    }
+
+    public function getColumnName($alias)
+    {
+        return $this->aliases[$alias] ?? $alias;
     }
 
     public function search($query, $search)
@@ -64,11 +72,10 @@ class UserFilter extends QueryFilter
 
     public function order($query, $value)
     {
-        $query->orderBy($value, $this->valid['direction'] ?? 'asc');
-    }
-
-    public function direction($query, $value)
-    {
-
+        if (Str::endsWith($value, '-desc')) {
+            $query->orderByDesc($this->getColumnName(Str::substr($value, 0, -5)));
+        } else {
+            $query->orderBy($this->getColumnName($value));
+        }
     }
 }

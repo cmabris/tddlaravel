@@ -34,8 +34,8 @@
                                 class="{{ $sortable->classes('email') }}">Correo</a>
                     </th>
                     <th scope="col"><a
-                                href="{{ $sortable->url('created_at') }}"
-                                class="{{ $sortable->classes('created_at') }}">Fechas</a></th>
+                                href="{{ $sortable->url('date') }}"
+                                class="{{ $sortable->classes('date') }}">Fechas</a></th>
                     <th scope="col" class="text-right th-actions">Acciones</th>
                 </tr>
                 </thead>
