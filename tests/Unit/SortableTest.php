@@ -69,4 +69,13 @@ class SortableTest extends TestCase
         );
     }
 
+    /** @test */
+    function gets_the_info_about_the_column_name_and_the_order_direction()
+    {
+        $this->assertSame(['first_name', 'asc'], Sortable::info('first_name'));
+        $this->assertSame(['first_name', 'desc'], Sortable::info('first_name-desc'));
+        $this->assertSame(['email', 'asc'], Sortable::info('email'));
+        $this->assertSame(['email', 'desc'], Sortable::info('email-desc'));
+    }
+
 }
