@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Filters\UserFilter;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -28,6 +29,11 @@ class User extends Authenticatable
     public function newEloquentBuilder($query)
     {
         return new UserQuery($query);
+    }
+
+    public function newQueryFilter()
+    {
+        return new UserFilter;
     }
 
     public function profile()
@@ -65,10 +71,5 @@ class User extends Authenticatable
     public function isAdmin()
     {
         return $this->role === 'admin';
-    }
-
-    public function scopeFilterBy($query, QueryFilter $filters, array $data)
-    {
-        return $filters->applyTo($query, $data);
     }
 }
