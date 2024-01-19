@@ -11,6 +11,7 @@ class UserFilter extends QueryFilter
 {
     protected $aliases = [
         'date' => 'created_at',
+        'login' => 'last_login_at',
     ];
 
     public function filterRules(): array
@@ -22,7 +23,7 @@ class UserFilter extends QueryFilter
             'skills' => 'array|exists:skills,id',
             'from' => 'date_format:d/m/Y',
             'to' => 'date_format:d/m/Y',
-            'order' => [new SortableColumn(['first_name', 'email', 'date'])],
+            'order' => [new SortableColumn(['first_name', 'email', 'date', 'login'])],
         ];
     }
 
