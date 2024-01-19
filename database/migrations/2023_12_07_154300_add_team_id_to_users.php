@@ -14,7 +14,7 @@ class AddTeamIdToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedInteger('team_id')
+            $table->unsignedBigInteger('team_id')
                 ->nullable()
                 ->after('id');
 

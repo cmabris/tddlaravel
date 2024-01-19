@@ -60,5 +60,10 @@ class UserSeeder extends Seeder
         $numSkills = $this->skills->count();
 
         $user->skills()->attach($this->skills->random(rand(0, $numSkills)));
+
+        factory(\App\Login::class)->times(rand(1, 10))->create([
+            'user_id' => $user->id,
+        ]);
+
     }
 }
