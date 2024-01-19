@@ -42,7 +42,8 @@ class UserProfileTest extends TestCase
 
         $response->assertRedirect('editar-perfil');
 
-        $this->assertDatabaseHas('users',
+        $this->assertDatabaseHas(
+            'users',
             [
                 'first_name' => 'Pepe',
                 'last_name' => 'Perez',

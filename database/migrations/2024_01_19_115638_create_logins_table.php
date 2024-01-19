@@ -21,7 +21,6 @@ class CreateLoginsTable extends Migration
 
             $table->timestamps();
         });
-
     }
 
     /**

@@ -79,6 +79,5 @@ class DeleteUsersTest extends TestCase
             //->assertSee(trans('users.title.trash'))
             ->assertSee('Joel')
             ->assertDontSee('Ellie');
-
     }
 }

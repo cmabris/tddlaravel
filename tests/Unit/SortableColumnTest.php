@@ -27,7 +27,5 @@ class SortableColumnTest extends TestCase
         $this->assertFalse($rule->passes('order', 'first_name-descx'));
         $this->assertFalse($rule->passes('order', 'email-des'));
         $this->assertFalse($rule->passes('order', 'desc-email'));
-
     }
-
 }

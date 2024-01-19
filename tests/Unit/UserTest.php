@@ -51,10 +51,13 @@ class UserTest extends TestCase
 
         $this->assertInstanceOf(Carbon::class, $users->firstWhere('first_name', 'Joel')->last_login_at);
 
-        $this->assertEquals(Carbon::parse('2019-09-18 12:31:00'),
-            $users->firstWhere('first_name', 'Joel')->last_login_at);
-        $this->assertEquals(Carbon::parse('2019-09-15 12:01:00'),
-            $users->firstWhere('first_name', 'Ellie')->last_login_at);
+        $this->assertEquals(
+            Carbon::parse('2019-09-18 12:31:00'),
+            $users->firstWhere('first_name', 'Joel')->last_login_at
+        );
+        $this->assertEquals(
+            Carbon::parse('2019-09-15 12:01:00'),
+            $users->firstWhere('first_name', 'Ellie')->last_login_at
+        );
     }
-
 }

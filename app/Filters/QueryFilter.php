@@ -21,7 +21,6 @@ abstract class QueryFilter
 
         foreach ($this->valid as $name => $value) {
             $this->applyFilters($query, $name, $value);
-
         }
 
         return $query;

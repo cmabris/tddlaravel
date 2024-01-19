@@ -64,6 +64,5 @@ class UserSeeder extends Seeder
         factory(\App\Login::class)->times(rand(1, 10))->create([
             'user_id' => $user->id,
         ]);
-
     }
 }

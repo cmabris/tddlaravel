@@ -49,8 +49,7 @@ class SortableTest extends TestCase
 
     /** @test */
     function builds_a_url_with_descendent_order_if_the_current_column_matches_the_given_one_and_the_current_direction_is_asc(
-    )
-    {
+    ) {
         $this->sortable->appends(['order' => 'first_name']);
         $this->assertSame(
             'http://curso-laravel/demo?order=first_name-desc',
@@ -77,5 +76,4 @@ class SortableTest extends TestCase
         $this->assertSame(['email', 'asc'], Sortable::info('email'));
         $this->assertSame(['email', 'desc'], Sortable::info('email-desc'));
     }
-
 }

@@ -124,7 +124,6 @@ class FilterUsersTest extends TestCase
             ->contains($newestUser)
             ->notContains($oldUser)
             ->notContains($oldestUser);
-
     }
 
     /** @test */
@@ -155,6 +154,5 @@ class FilterUsersTest extends TestCase
             ->contains($oldUser)
             ->notContains($newestUser)
             ->notContains($newUser);
-
     }
 }

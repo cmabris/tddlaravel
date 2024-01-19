@@ -59,7 +59,6 @@ class CreateUserRequest extends FormRequest
     public function createUser()
     {
         DB::transaction(function () {
-
             $user = new User([
                 'first_name' => $this->first_name,
                 'last_name' => $this->last_name,
@@ -78,7 +77,6 @@ class CreateUserRequest extends FormRequest
             ]);
 
             $user->skills()->attach($this->skills ?? []);
-
         });
     }
 }

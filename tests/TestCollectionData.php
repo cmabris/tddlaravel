@@ -32,5 +32,4 @@ class TestCollectionData
 
         return $this;
     }
-
 }

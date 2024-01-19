@@ -60,5 +60,4 @@ class Sortable
             return [$order, 'asc'];
         }
     }
-
 }
