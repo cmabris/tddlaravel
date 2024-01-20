@@ -6,6 +6,7 @@ use App\Filters\UserFilter;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -72,5 +73,18 @@ class User extends Authenticatable
     public function isAdmin()
     {
         return $this->role === 'admin';
+    }
+
+    public function delete()
+    {
+        DB::transaction(function () {
+            if (parent::delete()) {
+                $this->profile()->delete();
+
+                DB::table('skill_user')
+                    ->where('user_id', $this->id)
+                    ->update(['deleted_at' => now()]);
+            }
+        });
     }
 }
